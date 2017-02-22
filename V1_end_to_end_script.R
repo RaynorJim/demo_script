@@ -60,7 +60,7 @@ referenece_periods <- c("PP")  # these are either PP or YA - and determine which
 share_base_values       <- list(CATEGORY = "LAUNDRY")
 
 object_types <- c("BRAND")
-object_values <- list("ARIEL")
+object_values <- list("SOME_BRAND")
 business_objects <- setNames(object_values, object_types)
 
 
@@ -88,8 +88,8 @@ df_target <- unique(tbls[, c("Market", "Market_Level")])
 # This adds the dates to df_target - here for small dependency - might not be needed at all
 dates <- unique(tbls$Date)
 
-sales_var       <- c("VALUE_SALES_MLC")
-vol_var         <- c("VOLUME_SALES_MSU")
+sales_var_root_name       <- c("VALUE_SALES_MLC")
+vol_var_root_name         <- c("VOLUME_SALES_MSU")
 
 
 # Lists for storing the results -------------------------------------------
@@ -111,7 +111,8 @@ for(time_period in time_periods) {
   
   # TODO: make this parametrization cleaner
   if(!time_period %in% c("P1M", "P1W")) {
-    sales_var <- sales_var_vec %>% paste(time_period, sep = "_")
+    sales_var <- sales_var_root_name %>% paste(time_period, sep = "_")
+    vol_var   <- vol_var_root_name %>% paste(time_period, sep = "_")
   }
   
   # Second Loop to parallelize is different reference period - This means we compute over different columns
@@ -194,11 +195,5 @@ for(time_period in time_periods) {
 # Only as a placeholder for now
 save(top_tables, 
      list_markets,
-     cristmas_tree_tables_full,
-     cristmas_tree_tables_part,
-     ex_search_tables,
-     brand_competitors_time_series,
-     drivers_time_series,
-     best_paths,
      file = "temp_output_file.RData")
 
